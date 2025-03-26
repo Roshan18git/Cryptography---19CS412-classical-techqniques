@@ -1,17 +1,17 @@
 ## NAME:ROSHAN G
 ## REG NO:212223040176
-# Hill Cipher
-Hill Cipher using with different key values
+# Vigenere Cipher
+Vigenere Cipher using with different key values
 
 # AIM:
 
-To develop a simple C program to implement Hill Cipher.
+To develop a simple C program to implement Vigenere Cipher.
 
 ## DESIGN STEPS:
 
 ### Step 1:
 
-Design of Hill Cipher algorithnm 
+Design of Vigenere Cipher algorithnm 
 
 ### Step 2:
 
@@ -20,113 +20,54 @@ Implementation using C or pyhton code
 ### Step 3:
 
 Testing algorithm with different key values. 
-## ALGORITHM DESCRIPTION:
-The Hill cipher is a substitution cipher invented by Lester S. Hill in 1929. Each letter is represented by a number modulo 26. To encrypt a message, each block of n letters is multiplied by an invertible n × n matrix, again modulus 26.
-To decrypt the message, each block is multiplied by the inverse of the matrix used for encryption. The matrix used for encryption is the cipher key, and it should be chosen randomly from the set of invertible n × n matrices (modulo 26).
-The cipher can, be adapted to an alphabet with any number of letters. All arithmetic just needs to be done modulo the number of letters instead of modulo 26.
-
 
 ## PROGRAM:
-
 ```
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+void main()
 
-int keymat[3][3] = { { 1, 2, 1 }, { 2, 3, 2 }, { 2, 2, 1 } };
-int invkeymat[3][3] = { { -1, 0, 1 }, { 2, -1, 0 }, { -2, 2, -1 } };
-char key[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+{
+    char plain[10],cipher[10];
+    int key,i,length;
+    int result;
+    printf("\n Enter the plain text:");
+    scanf("%s", plain);
+    printf("\n Enter the key value:");
+    scanf("%d", &key);
+    printf("\n \n \t PLAIN TEXt: %s", plain);
+    printf("\n \n \t ENCRYPTED TEXT:");
+    for(i=0, length = strlen(plain); i<length; i++)
+    {
+        
+        cipher[i]=plain[i] + key;
+        if (isupper(plain[i]) && (cipher[i] > 'Z'))
+        cipher[i] = cipher[i] - 26;
+        if (islower(plain[i]) && (cipher[i] > 'z'))
+        cipher[i] = cipher[i] - 26;
+        printf("%c", cipher[i]);
 
-// Function to encode a triplet of characters
-void encode(char a, char b, char c, char ret[]) {
-    int x, y, z;
-    int posa = (int)a - 65;
-    int posb = (int)b - 65;
-    int posc = (int)c - 65;
+    }
+    printf("\n \n \t AFTER DECRYPTION : ");
+    for(i=0;i<length;i++)
+    {
+        
+        plain[i]=cipher[i]-key;
+        if(isupper(cipher[i])&&(plain[i]<'A'))
+        plain[i]=plain[i]+26;
+        if(islower(cipher[i])&&(plain[i]<'a'))
+        plain[i]=plain[i]+26;
+        printf("%c",plain[i]);
+    }
 
-    x = posa * keymat[0][0] + posb * keymat[1][0] + posc * keymat[2][0];
-    y = posa * keymat[0][1] + posb * keymat[1][1] + posc * keymat[2][1];
-    z = posa * keymat[0][2] + posb * keymat[1][2] + posc * keymat[2][2];
-
-    ret[0] = key[x % 26];
-    ret[1] = key[y % 26];
-    ret[2] = key[z % 26];
-    ret[3] = '\0';
+    
 }
-
-// Function to decode a triplet of characters
-void decode(char a, char b, char c, char ret[]) {
-    int x, y, z;
-    int posa = (int)a - 65;
-    int posb = (int)b - 65;
-    int posc = (int)c - 65;
-
-    x = posa * invkeymat[0][0] + posb * invkeymat[1][0] + posc * invkeymat[2][0];
-    y = posa * invkeymat[0][1] + posb * invkeymat[1][1] + posc * invkeymat[2][1];
-    z = posa * invkeymat[0][2] + posb * invkeymat[1][2] + posc * invkeymat[2][2];
-
-    ret[0] = key[(x % 26 < 0) ? (26 + x % 26) : (x % 26)];
-    ret[1] = key[(y % 26 < 0) ? (26 + y % 26) : (y % 26)];
-    ret[2] = key[(z % 26 < 0) ? (26 + z % 26) : (z % 26)];
-    ret[3] = '\0';
-}
-
-int main() {
-    char msg[1000];
-    char enc[1000] = "";
-    char dec[1000] = "";
-    int n;
-
-    strcpy(msg, "PRIYA");
-    printf("Input message : %s\n", msg);
-
-    // Convert the input message to uppercase
-    for (int i = 0; i < strlen(msg); i++) {
-        msg[i] = toupper(msg[i]);
-    }
-
-    // Remove spaces
-    n = strlen(msg) % 3;
-
-    // Append padding text 'X' if necessary
-    if (n != 0) {
-        for (int i = 1; i <= (3 - n); i++) {
-            strcat(msg, "X");
-        }
-    }
-
-    printf("Padded message : %s\n", msg);
-
-    // Encode the message
-    for (int i = 0; i < strlen(msg); i += 3) {
-        char a = msg[i];
-        char b = msg[i + 1];
-        char c = msg[i + 2];
-        char encoded[4];
-        encode(a, b, c, encoded);
-        strcat(enc, encoded);
-    }
-
-    printf("Encoded message : %s\n", enc);
-
-    // Decode the message
-    for (int i = 0; i < strlen(enc); i += 3) {
-        char a = enc[i];
-        char b = enc[i + 1];
-        char c = enc[i + 2];
-        char decoded[4];
-        decode(a, b, c, decoded);
-        strcat(dec, decoded);
-    }
-
-    printf("Decoded message : %s\n", dec);
-    return 0;
-}
-
 ```
 
 ## OUTPUT:
-![image](https://github.com/user-attachments/assets/99ff44e3-42e2-404f-943d-5740af7d4e6d)
+![image](https://github.com/user-attachments/assets/18844da4-c92e-4f7f-9993-a5875ea048dc)
 
 
 ## RESULT:
